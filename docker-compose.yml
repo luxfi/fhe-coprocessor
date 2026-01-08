@@ -1,0 +1,105 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  scheduler:
+    build:
+      context: .
+      target: scheduler
+    ports:
+      - "8081:8081"
+    environment:
+      - LOG_LEVEL=info
+    command:
+      - "-redis"
+      - "redis:6379"
+      - "-http"
+      - ":8081"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  gateway:
+    build:
+      context: .
+      target: gateway
+    ports:
+      - "8080:8080"
+    volumes:
+      - ciphertext-storage:/data/storage
+    environment:
+      - LOG_LEVEL=info
+    command:
+      - "-redis"
+      - "redis:6379"
+      - "-storage"
+      - "/data/storage"
+      - "-http"
+      - ":8080"
+    depends_on:
+      redis:
+        condition: service_healthy
+      scheduler:
+        condition: service_started
+
+  worker:
+    build:
+      context: .
+      target: worker
+    deploy:
+      replicas: 2
+    volumes:
+      - ciphertext-storage:/data/storage
+      - ./keys:/keys:ro
+    environment:
+      - LOG_LEVEL=info
+    command:
+      - "-redis"
+      - "redis:6379"
+      - "-storage"
+      - "/data/storage"
+      - "-server-key"
+      - "/keys/server.key"
+      - "-workers"
+      - "4"
+      - "-metrics"
+      - ":9090"
+    depends_on:
+      redis:
+        condition: service_healthy
+      scheduler:
+        condition: service_started
+
+  # Prometheus for metrics (optional)
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    profiles:
+      - monitoring
+
+  # Grafana for dashboards (optional)
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    profiles:
+      - monitoring
+
+volumes:
+  redis-data:
+  ciphertext-storage:
+  grafana-data:
