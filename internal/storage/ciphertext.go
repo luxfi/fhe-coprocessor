@@ -18,10 +18,10 @@ import (
 
 // Common errors.
 var (
-	ErrNotFound       = errors.New("ciphertext not found")
-	ErrStorageFull    = errors.New("storage capacity exceeded")
-	ErrInvalidHandle  = errors.New("invalid ciphertext handle")
-	ErrAlreadyExists  = errors.New("ciphertext already exists")
+	ErrNotFound      = errors.New("ciphertext not found")
+	ErrStorageFull   = errors.New("storage capacity exceeded")
+	ErrInvalidHandle = errors.New("invalid ciphertext handle")
+	ErrAlreadyExists = errors.New("ciphertext already exists")
 )
 
 // Handle uniquely identifies a ciphertext.

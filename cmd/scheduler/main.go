@@ -254,8 +254,8 @@ func run() error {
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"workers":          len(workers),
-			"total_capacity":   capacity,
+			"workers":        len(workers),
+			"total_capacity": capacity,
 		})
 	})
 

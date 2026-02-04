@@ -28,14 +28,14 @@ func main() {
 func run() error {
 	// Flags.
 	var (
-		startBlock     = flag.Uint64("start-block", 0, "block to start scanning from (0 = latest)")
-		confirmations  = flag.Uint64("confirmations", 2, "required block confirmations")
-		redisAddr      = flag.String("redis", "localhost:6379", "Redis address")
-		redisDB        = flag.Int("redis-db", 0, "Redis database number")
-		queueName      = flag.String("queue", "default", "queue name")
-		storagePath    = flag.String("storage", "/tmp/fhe-storage", "ciphertext storage path")
-		httpAddr       = flag.String("http", ":8080", "HTTP API address")
-		logLevel       = flag.String("log-level", "info", "log level (debug, info, warn, error)")
+		startBlock    = flag.Uint64("start-block", 0, "block to start scanning from (0 = latest)")
+		confirmations = flag.Uint64("confirmations", 2, "required block confirmations")
+		redisAddr     = flag.String("redis", "localhost:6379", "Redis address")
+		redisDB       = flag.Int("redis-db", 0, "Redis database number")
+		queueName     = flag.String("queue", "default", "queue name")
+		storagePath   = flag.String("storage", "/tmp/fhe-storage", "ciphertext storage path")
+		httpAddr      = flag.String("http", ":8080", "HTTP API address")
+		logLevel      = flag.String("log-level", "info", "log level (debug, info, warn, error)")
 	)
 	flag.Parse()
 

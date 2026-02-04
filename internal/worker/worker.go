@@ -40,11 +40,11 @@ type Pool struct {
 	executor *OperationExecutor
 	logger   *zap.Logger
 
-	wg       sync.WaitGroup
-	cancel   context.CancelFunc
-	running  atomic.Bool
-	stats    *OperationStats
-	statsMu  sync.RWMutex
+	wg      sync.WaitGroup
+	cancel  context.CancelFunc
+	running atomic.Bool
+	stats   *OperationStats
+	statsMu sync.RWMutex
 }
 
 // NewPool creates a new worker pool.
